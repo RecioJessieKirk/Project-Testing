@@ -15,7 +15,6 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat", "bottle", "bus"
 
 # ✅ Initialize Text-to-Speech (TTS)
 engine = pyttsx3.init()
-last_announced_object = None
 
 # ✅ Open Webcam (Optimized for Orange Pi Zero 2 W)
 cap = cv2.VideoCapture(0)
@@ -35,7 +34,7 @@ while cap.isOpened():
     net.setInput(blob)
     detections = net.forward()
 
-    # ✅ Find the Closest Object
+    # ✅ Find the Closest Object to the Center
     h, w = frame.shape[:2]
     closest_object = None
     min_distance = float("inf")
@@ -48,6 +47,12 @@ while cap.isOpened():
             box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
             (x1, y1, x2, y2) = box.astype("int")
 
+            # Draw Bounding Box and Label
+            color = (0, 255, 0)  # Green for detected objects
+            cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
+            label = f"{obj_name}: {int(confidence * 100)}%"
+            cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+
             # Compute distance to center
             obj_center_x = (x1 + x2) // 2
             obj_center_y = (y1 + y2) // 2
@@ -57,19 +62,18 @@ while cap.isOpened():
                 min_distance = distance
                 closest_object = obj_name
 
-    # ✅ Announce Closest Object
-    if closest_object and closest_object != last_announced_object:
+    # ✅ Show the Frame with Detections
+    cv2.imshow("Object Detection - MobileNet SSD", frame)
+
+    # ✅ Key Press Events
+    key = cv2.waitKey(1) & 0xFF
+
+    if key == ord("y") and closest_object:
         print(f"Announcing: {closest_object}")
         engine.say(closest_object)
         engine.runAndWait()
-        last_announced_object = closest_object
 
-    # ✅ Measure Inference Time
-    elapsed_time = time.time() - start_time
-    print(f"Inference Time: {elapsed_time:.3f} sec ({1 / elapsed_time:.1f} FPS)")
-
-    # Exit with 'q'
-    if cv2.waitKey(1) & 0xFF == ord("q"):
+    elif key == ord("q"):
         break
 
 cap.release()

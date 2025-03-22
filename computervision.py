@@ -50,11 +50,15 @@ try:
 
             # Check if 'Y' is held for the required duration
             elif (time.time() - y_pressed_time) >= y_hold_duration:
-                if closest_object and closest_object != last_announced_object:  # Announce only new objects
-                    print(f"Announcing object: {closest_object}")
-                    engine.say(closest_object)
-                    engine.runAndWait()
+                if closest_object:
+                    if closest_object != last_announced_object:  # New object detected
+                        print(f"Announcing object: {closest_object}")
+                        engine.say(f"{closest_object}")
+                    else:  # Same object detected
+                        print(f"Still detecting: {closest_object}")
+                        engine.say(f"Still detecting {closest_object}")
 
+                    engine.runAndWait()
                     last_announced_object = closest_object  # Update last announced object
 
                 y_pressed_time = None  # Reset timer after speaking
@@ -85,6 +89,11 @@ try:
         # Allow exiting the loop with 'ESC'
         if keyboard.is_pressed('esc'):
             print("User pressed 'ESC'. Stopping detection.")
+            break
+
+        # Fix 'Q' not working after pressing 'Y'
+        if keyboard.is_pressed('q'):
+            print("User pressed 'Q'. Stopping detection.")
             break
 
         cv2.waitKey(1)  # Ensures OpenCV window updates properly
