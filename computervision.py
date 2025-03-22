@@ -5,20 +5,35 @@ import time
 import keyboard  # For non-blocking key detection
 import numpy as np
 
-# Initialize YOLO model
+# ✅ Function to Detect and Open First Available Camera
+def get_camera_index():
+    for index in range(5):  # Check first 5 indexes (0,1,2,3,4)
+        cap = cv2.VideoCapture(index)
+        if cap.isOpened():
+            cap.release()
+            return index
+    return None  # No available camera
+
+# ✅ Try to Auto-Detect Camera
+camera_index = get_camera_index()
+if camera_index is None:
+    print("No available camera found. Exiting...")
+    exit()
+
+# ✅ Initialize YOLO model
 model = YOLO('yolov5nu.pt')
 
-# Initialize Text-to-Speech (TTS) engine
+# ✅ Initialize Text-to-Speech (TTS)
 engine = pyttsx3.init()
 
-# Track object announcements
+# ✅ Track object announcements
 last_announced_object = None
 y_pressed_time = None  # Track when 'Y' is first pressed
 y_hold_duration = 3  # Seconds to trigger announcement
 
 try:
-    # Start webcam and process detections
-    for result in model.predict(source=0, show=True, stream=True):
+    # ✅ Start webcam and process detections
+    for result in model.predict(source=camera_index, show=True, stream=True):
         frame = result.orig_img  # Get the original video frame
         h, w, _ = frame.shape  # Get frame dimensions
         center_x, center_y = w // 2, h // 2  # Calculate the center of the frame
@@ -27,7 +42,7 @@ try:
         closest_object = None
         min_distance = float('inf')  # Initialize with a large value
 
-        # Process detected objects
+        # ✅ Process detected objects
         if result.boxes:
             for box in result.boxes:
                 obj_name = model.names[int(box.cls)]  # Get object name
@@ -43,7 +58,7 @@ try:
                     min_distance = distance
                     closest_object = obj_name
 
-        # Detect if 'Y' is being held down
+        # ✅ Detect if 'Y' is being held down
         if keyboard.is_pressed('y'):
             if y_pressed_time is None:
                 y_pressed_time = time.time()  # Start timing when 'Y' is first pressed
@@ -65,7 +80,7 @@ try:
         else:
             y_pressed_time = None  # Reset if 'Y' is released
 
-        # Draw bounding boxes and display the frame
+        # ✅ Draw bounding boxes and display the frame
         if result.boxes:
             for box in result.boxes:
                 x1, y1, x2, y2 = map(int, box.xyxy[0])  # Get bounding box
@@ -75,23 +90,23 @@ try:
                 cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
                 cv2.putText(frame, obj_name, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
-        # Draw a crosshair at the center of the screen
+        # ✅ Draw a crosshair at the center of the screen
         cv2.drawMarker(frame, (center_x, center_y), (255, 0, 0), markerType=cv2.MARKER_CROSS, markerSize=20, thickness=2)
 
-        # Display the frame
+        # ✅ Display the frame
         cv2.imshow("YOLO Detection", frame)
 
-        # Ensure OpenCV window stays open
+        # ✅ Ensure OpenCV window stays open
         if cv2.getWindowProperty("YOLO Detection", cv2.WND_PROP_VISIBLE) < 1:
             print("Window closed. Stopping detection.")
             break
 
-        # Allow exiting the loop with 'ESC'
+        # ✅ Allow exiting the loop with 'ESC'
         if keyboard.is_pressed('esc'):
             print("User pressed 'ESC'. Stopping detection.")
             break
 
-        # Fix 'Q' not working after pressing 'Y'
+        # ✅ Fix 'Q' not working after pressing 'Y'
         if keyboard.is_pressed('q'):
             print("User pressed 'Q'. Stopping detection.")
             break
