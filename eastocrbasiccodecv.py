@@ -2,36 +2,54 @@ import cv2
 import easyocr
 import pyttsx3
 
-# Initialize EasyOCR reader
+# ✅ Function to Detect and Open First Available Camera
+def get_camera_index():
+    for index in range(5):  # Check first 5 indexes (0,1,2,3,4)
+        cap = cv2.VideoCapture(index)
+        if cap.isOpened():
+            cap.release()
+            return index
+    return None  # No available camera
+
+# ✅ Try to Auto-Detect Camera
+camera_index = get_camera_index()
+if camera_index is None:
+    print("No available camera found. Exiting...")
+    exit()
+
+# ✅ Initialize Camera
+cap = cv2.VideoCapture(camera_index)
+
+# ✅ Initialize OCR & TTS
 reader = easyocr.Reader(['en'], model_storage_directory='ocr_model')
 engine = pyttsx3.init()
 
-# Start video capture
-cap = cv2.VideoCapture(0)
-
 while True:
     ret, frame = cap.read()
-    cv2.imshow("Press 'C' to Capture | 'Q' to Quit", frame)
+    if not ret:
+        print("Camera feed not available. Exiting...")
+        break
 
+    cv2.imshow("Press 'C' to Capture | 'Q' to Quit", frame)
     key = cv2.waitKey(1) & 0xFF
 
     if key == ord('c'):
         print("Image Captured! Processing text...")
-        cv2.waitKey(1)  # Ensure the frame updates
+        cv2.waitKey(1)  # Ensure frame updates
 
-        # Process the current frame
+        # ✅ Process the current frame
         results = reader.readtext(frame)
         extracted_text = " ".join([text for (_, text, _) in results])
 
-        if extracted_text.strip():  # Only if text is detected
+        if extracted_text.strip():  # ✅ Only if text is detected
             print("Detected Text:")
             print(extracted_text)
 
-            # Ask via TTS if the user wants the text read aloud
+            # ✅ Ask via TTS if the user wants the text read aloud
             engine.say("I have found a text. Press Y for Yes or N for No.")
             engine.runAndWait()
 
-            while True:  # Wait for user input (Y/N)
+            while True:  # ✅ Wait for user input (Y/N)
                 key = cv2.waitKey(0) & 0xFF  # Wait indefinitely for key press
                 if key == ord('y'):
                     print("Reading text...")
