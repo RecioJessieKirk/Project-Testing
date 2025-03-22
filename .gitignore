@@ -1,0 +1,4 @@
+*.log
+*.jpg
+*.json
+coco2017/
