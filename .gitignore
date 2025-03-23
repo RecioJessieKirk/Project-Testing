@@ -2,3 +2,7 @@
 *.jpg
 *.json
 coco2017/
+icdar/
+pothole/
+*.txt
+*.png
