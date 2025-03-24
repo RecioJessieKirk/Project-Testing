@@ -7,3 +7,4 @@ pothole/
 *.txt
 *.png
 yolov5/
+cocosubset/

@@ -21,7 +21,10 @@ if camera_index is None:
     exit()
 
 # ✅ Initialize YOLO model
-model = YOLO('yolov5nu.pt')
+from ultralytics import YOLO
+
+model = YOLO(r"C:\Users\Kirk Recio\Documents\PYTHON\Project Testing\Data Cleaning Training\yolov5nu.pt")
+
 
 # ✅ Initialize Text-to-Speech (TTS)
 engine = pyttsx3.init()

@@ -1,6 +1,5 @@
-train: pothole/images/train # Path to training images
-val: pothole/images/val # Path to validation images
-test: pothole/images/test # Optional, for testing
-
-nc: 1 # Number of classes
-names: ["pothole"] # Class names
+train: pothole/images/train
+val: pothole/images/val
+test: pothole/images/test # (if applicable)
+nc: 1
+names: ["pothole"]
