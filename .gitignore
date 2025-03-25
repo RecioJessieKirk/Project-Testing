@@ -6,5 +6,5 @@ icdar/
 pothole/
 *.txt
 *.png
-yolov5/
+yolov5v/
 cocosubset/
