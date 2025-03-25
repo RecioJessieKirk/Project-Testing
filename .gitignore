@@ -6,5 +6,6 @@ icdar/
 pothole/
 *.txt
 *.png
-yolov5v/
+yolov5/
 cocosubset/
+Data Cleaning Training/yolov5
