@@ -76,6 +76,6 @@ while True:
     elif key == ord('q'):
         print("Exiting...")
         break
-
+ 
 cap.release()
 cv2.destroyAllWindows()

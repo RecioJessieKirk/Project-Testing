@@ -126,3 +126,4 @@ except KeyboardInterrupt:
 finally:
     cv2.destroyAllWindows()
     print("Detection stopped, and resources cleaned up.")
+ 
