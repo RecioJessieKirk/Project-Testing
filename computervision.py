@@ -4,6 +4,7 @@ import pyttsx3
 import time
 import keyboard  # For non-blocking key detection
 import numpy as np
+import sys  # Allows exiting the script
 
 # ✅ Function to Detect and Open First Available Camera
 def get_camera_index():
@@ -21,10 +22,7 @@ if camera_index is None:
     exit()
 
 # ✅ Initialize YOLO model
-from ultralytics import YOLO
-
 model = YOLO(r"C:\Users\Kirk Recio\Documents\PYTHON\Project Testing\Data Cleaning Training\yolov5nu.pt")
-
 
 # ✅ Initialize Text-to-Speech (TTS)
 engine = pyttsx3.init()
@@ -83,6 +81,12 @@ try:
         else:
             y_pressed_time = None  # Reset if 'Y' is released
 
+        # ✅ Detect if 'O' is pressed (Switch to OCR)
+        if keyboard.is_pressed('o'):
+            print("Switching to OCR mode...")
+            cv2.destroyAllWindows()
+            sys.exit(1)  # Exit the script to signal `main.py` to switch to OCR
+
         # ✅ Draw bounding boxes and display the frame
         if result.boxes:
             for box in result.boxes:
@@ -109,7 +113,7 @@ try:
             print("User pressed 'ESC'. Stopping detection.")
             break
 
-        # ✅ Fix 'Q' not working after pressing 'Y'
+        # ✅ Allow quitting with 'Q'
         if keyboard.is_pressed('q'):
             print("User pressed 'Q'. Stopping detection.")
             break

@@ -1,6 +1,7 @@
 import cv2
 import easyocr
 import pyttsx3
+import sys  # Allows switching between modes
 
 # ✅ Function to Detect and Open First Available Camera
 def get_camera_index():
@@ -30,7 +31,7 @@ while True:
         print("Camera feed not available. Exiting...")
         break
 
-    cv2.imshow("Press 'C' to Capture | 'Q' to Quit", frame)
+    cv2.imshow("Press 'C' to Capture | 'O' to Switch to Object Detection | 'Q' to Quit", frame)
     key = cv2.waitKey(1) & 0xFF
 
     if key == ord('c'):
@@ -66,6 +67,11 @@ while True:
             engine.runAndWait()
 
         print("Ready for another capture. Press 'C' to capture again or 'Q' to quit.")
+
+    elif key == ord('o'):  # ✅ Switch to YOLO Object Detection
+        print("Switching to Object Detection...")
+        cv2.destroyAllWindows()
+        sys.exit(1)  # Exit with status 1 to signal `main.py` to switch to YOLO
 
     elif key == ord('q'):
         print("Exiting...")
