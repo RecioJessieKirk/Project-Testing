@@ -22,4 +22,3 @@ while True:
     
     else:
         print("Invalid input. Please enter 'yolo', 'ocr', or 'exit'.")
- 
