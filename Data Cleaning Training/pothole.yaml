@@ -1,5 +1,0 @@
-train: pothole/images/train
-val: pothole/images/val
-test: pothole/images/test # (if applicable)
-nc: 1
-names: ["pothole"]
