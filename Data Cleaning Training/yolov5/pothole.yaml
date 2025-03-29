@@ -1,0 +1,6 @@
+path: ../pothole
+train: ../pothole/images/train
+val: ../pothole/images/val
+
+nc: 1
+names: ["pothole"]
