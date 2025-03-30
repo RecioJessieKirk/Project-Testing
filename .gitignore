@@ -11,3 +11,12 @@ testtrainingcodes.ipynb
 cocosubset.zip
 pothole.zip
 yolov5testtrain/
+
+# Ignore all .txt files
+*.txt
+
+# Ignore .txt files inside icdar2015
+icdar2015/*.txt
+
+# Allow requirements.txt (override the ignore rule)
+!requirements.txt
