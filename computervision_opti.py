@@ -6,7 +6,7 @@ import time
 
 # ✅ Load YOLOv5-Nano Model (FP16 for Speed)
 device = "cpu"  # Orange Pi lacks CUDA
-model = torch.hub.load("ultralytics/yolov5", "custom", path="yolov5n.pt").to(device)
+model = torch.hub.load("ultralytics/yolov5", "custom", path="Data Cleaning Training/yolov5testtrain/runs/train/exp20/weights/best.pt").to(device)
 model.half()  # Use FP16 for performance
 
 # ✅ Initialize Text-to-Speech (TTS)
