@@ -11,7 +11,7 @@ testtrainingcodes.ipynb
 cocosubset.zip
 pothole.zip
 yolov5testtrain/
-
+cocosubsetbackup/
 # Ignore all .txt files
 *.txt
 
